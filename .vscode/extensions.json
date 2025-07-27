@@ -1,0 +1,16 @@
+{
+  "recommendations": [
+    "astro-build.astro-language-tools",
+    "bradlc.vscode-tailwindcss",
+    "mrmlnc.vscode-scss",
+    "csstools.postcss",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "christian-kohler.path-intellisense",
+    "yzhang.markdown-all-in-one",
+    "editorconfig.editorconfig",
+    "eamodio.gitlens",
+    "antfu.i18n-ally",
+    "christian-kohler.npm-intellisense"
+  ]
+}

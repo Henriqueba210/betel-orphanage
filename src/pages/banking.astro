@@ -1,0 +1,162 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+  <div class="min-h-screen bg-gradient-to-br from-base-100 to-base-200">
+    <!-- Hero Section -->
+    <div class="hero min-h-[40vh] bg-gradient-to-r from-primary/10 to-secondary/10">
+      <div class="hero-content text-center">
+        <div class="max-w-2xl">
+          <h1 class="text-5xl font-bold text-base-content mb-6">
+            💳 Informações Bancárias
+          </h1>
+          <p class="text-xl text-base-content/80">
+            Faça a sua doação diretamente para o projeto Centro de Acolhimento Betel
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Banking Details Section -->
+    <div class="container mx-auto px-4 py-16">
+      <div class="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        
+        <!-- Main Account Information -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-2xl mb-6 flex items-center">
+              🏦 Conta Principal
+            </h2>
+            
+            <div class="space-y-4">
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-base-content/60">Nome da Conta</span>
+                <span class="text-lg font-semibold">Igreja Baptista de Leiria</span>
+              </div>
+              
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-base-content/60">IBAN</span>
+                <span class="text-lg font-mono bg-base-200 p-3 rounded-lg">PT50 1234 5678 9012 3456 7890 1</span>
+              </div>
+              
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-base-content/60">BIC/SWIFT</span>
+                <span class="text-lg font-mono">ABCDPTPL</span>
+              </div>
+              
+              <div class="flex flex-col">
+                <span class="text-sm font-medium text-base-content/60">Banco</span>
+                <span class="text-lg">Banco Comercial Português</span>
+              </div>
+            </div>
+            
+            <div class="card-actions justify-end mt-6">
+              <button class="btn btn-primary" onclick="copyToClipboard('PT50 1234 5678 9012 3456 7890 1')">
+                📋 Copiar IBAN
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alternative Payment Methods -->
+        <div class="card bg-base-100 shadow-xl">
+          <div class="card-body">
+            <h2 class="card-title text-2xl mb-6 flex items-center">
+              💰 Outras Formas de Doação
+            </h2>
+            
+            <div class="space-y-6">
+              <!-- PayPal -->
+              <div class="flex items-center p-4 bg-base-200 rounded-lg">
+                <div class="text-3xl mr-4">💳</div>
+                <div class="flex-1">
+                  <h3 class="font-semibold">PayPal</h3>
+                  <p class="text-sm text-base-content/70">Doação segura via PayPal</p>
+                </div>
+                <button class="btn btn-outline btn-sm">Doar</button>
+              </div>
+              
+              <!-- MBWay -->
+              <div class="flex items-center p-4 bg-base-200 rounded-lg">
+                <div class="text-3xl mr-4">📱</div>
+                <div class="flex-1">
+                  <h3 class="font-semibold">MB WAY</h3>
+                  <p class="text-sm text-base-content/70">Transferência instantânea</p>
+                </div>
+                <button class="btn btn-outline btn-sm">Doar</button>
+              </div>
+              
+              <!-- Check -->
+              <div class="flex items-center p-4 bg-base-200 rounded-lg">
+                <div class="text-3xl mr-4">📄</div>
+                <div class="flex-1">
+                  <h3 class="font-semibold">Cheque</h3>
+                  <p class="text-sm text-base-content/70">Enviar para a igreja</p>
+                </div>
+                <button class="btn btn-outline btn-sm">Info</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Important Information -->
+      <div class="max-w-4xl mx-auto mt-12">
+        <div class="alert alert-info">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <div>
+            <h3 class="font-bold">Informação Importante</h3>
+            <div class="text-sm">
+              <p>• Todas as doações são dedutíveis no IRS (Portugal)</p>
+              <p>• Envie comprovativo para: contabilidade@betel.org</p>
+              <p>• Para doações internacionais, use o BIC/SWIFT fornecido</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tax Benefits -->
+      <div class="max-w-4xl mx-auto mt-8">
+        <div class="card bg-gradient-to-r from-success/10 to-info/10 border-success/20">
+          <div class="card-body">
+            <h3 class="card-title text-success">🏛️ Benefícios Fiscais</h3>
+            <div class="grid md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <h4 class="font-semibold">Pessoas Singulares</h4>
+                <p class="text-sm">Dedução de 25% até 15% do rendimento coletável</p>
+              </div>
+              <div>
+                <h4 class="font-semibold">Empresas</h4>
+                <p class="text-sm">Dedução de 130% do valor doado no IRC</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function copyToClipboard(text: string) {
+      navigator.clipboard.writeText(text).then(() => {
+        // Show success message
+        const button = (event as Event)?.target;
+        if (button && button instanceof HTMLButtonElement) {
+          const originalText = button.textContent || '';
+          button.textContent = '✅ Copiado!';
+          button.classList.add('btn-success');
+          button.classList.remove('btn-primary');
+          
+          setTimeout(() => {
+            button.textContent = originalText;
+            button.classList.remove('btn-success');
+            button.classList.add('btn-primary');
+          }, 2000);
+        }
+      });
+    }
+  </script>
+</Layout> 

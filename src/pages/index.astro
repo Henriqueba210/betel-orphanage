@@ -1,0 +1,106 @@
+---
+import Layout from '../layouts/Layout.astro';
+import HeroCarousel from '../components/HeroCarousel.tsx';
+---
+
+<Layout>
+  <HeroCarousel client:load />
+
+  <!-- Mission Section -->
+  <section class="hero min-h-screen bg-base-200">
+    <div class="hero-content flex-col lg:flex-row max-w-6xl">
+        <div>
+          <h1 class="text-5xl font-bold">Nossa Missão</h1>
+          <p class="py-6">A Igreja Baptista de Leiria desenvolve trabalho missionário em Moçambique desde 1992, com mais de 500 trabalhos iniciados na província da Zambézia.</p>
+          <p class="pb-6">O Centro de Acolhimento Betel será um espaço que acolhe crianças órfãs em ambiente familiar, com escola, biblioteca, posto de saúde e formação profissional.</p>
+          <div class="stats stats-vertical lg:stats-horizontal shadow-xl">
+            <div class="stat">
+              <div class="stat-title">Anos de Experiência</div>
+              <div class="stat-value text-primary">30+</div>
+            </div>
+            <div class="stat">
+              <div class="stat-title">Igrejas Estabelecidas</div>
+              <div class="stat-value text-primary">500+</div>
+            </div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4 lg:w-1/2">
+          <div class="avatar">
+            <div class="w-full rounded-xl shadow-2xl">
+              <img src="/images/page_3_img_1.jpeg" alt="Igreja Baptista de Leiria">
+            </div>
+          </div>
+          <div class="avatar">
+            <div class="w-full rounded-xl shadow-2xl">
+              <img src="/images/page_6_img_1.jpeg" alt="Trabalho em Moçambique">
+            </div>
+          </div>
+          <div class="avatar">
+            <div class="w-full rounded-xl shadow-2xl">
+              <img src="/images/page_7_img_1.jpeg" alt="Entrega de material">
+            </div>
+          </div>
+          <div class="avatar">
+            <div class="w-full rounded-xl shadow-2xl">
+              <img src="/images/page_8_img_1.jpeg" alt="Trabalho comunitário">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Project Gallery -->
+  <section class="py-16 px-4 bg-base-100">
+    <div class="container mx-auto max-w-6xl text-center">
+      <h2 class="text-4xl font-bold mb-4">Progresso da Construção</h2>
+      <p class="text-lg mb-12 opacity-70">Acompanhe o desenvolvimento do nosso centro</p>
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="card bg-base-200 shadow-2xl image-full">
+          <figure><img src="/images/page_15_img_1.jpeg" alt="Preparação das bases" class="h-48 w-full object-cover"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Preparação das Bases</h3>
+            <p>Início da construção com preparação do terreno e fundações.</p>
+            <div class="card-actions justify-end">
+              <div class="badge badge-primary">Concluído</div>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-base-200 shadow-2xl image-full">
+          <figure><img src="/images/page_19_img_2.jpeg" alt="Montagem modular" class="h-48 w-full object-cover"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Montagem Modular</h3>
+            <p>Construção das casas familiares usando painéis modulares.</p>
+            <div class="card-actions justify-end">
+              <div class="badge badge-secondary">Em Progresso</div>
+            </div>
+          </div>
+        </div>
+        <div class="card bg-base-200 shadow-2xl image-full">
+          <figure><img src="/images/page_22_img_1.jpeg" alt="Projeto completo" class="h-48 w-full object-cover"></figure>
+          <div class="card-body">
+            <h3 class="card-title">Visão do Projeto</h3>
+            <p>Centro completo com 10 casas familiares, escola e biblioteca.</p>
+            <div class="card-actions justify-end">
+              <div class="badge badge-accent">Planejado</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="hero min-h-96 bg-primary">
+    <div class="hero-content text-center text-primary-content">
+      <div class="max-w-4xl">
+        <h1 class="text-5xl font-bold mb-6">Faça Parte Desta Transformação</h1>
+        <p class="text-xl mb-8">Precisamos de €20.000 para concluir a construção e €2.500 mensais para manter o funcionamento do centro.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <button class="btn btn-secondary btn-lg">Entre em Contato</button>
+          <button class="btn btn-outline btn-lg">Informações Bancárias</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
