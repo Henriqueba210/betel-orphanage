@@ -28,11 +28,13 @@ export default function OptimizedVideo({
   const [isLoaded, setIsLoaded] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(muted);
+  const [volume, setVolume] = useState(1);
   const [isError, setIsError] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [showControls, setShowControls] = useState(false);
   const [showCenterButton, setShowCenterButton] = useState(false);
+  const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const centerButtonTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -44,6 +46,10 @@ export default function OptimizedVideo({
 
   const handleCanPlay = () => {
     setIsLoaded(true);
+    // Set initial volume
+    if (videoRef.current) {
+      videoRef.current.volume = volume;
+    }
     // If autoplay is enabled, start playing and update state
     if (autoplay && videoRef.current) {
       videoRef.current.play().then(() => {
@@ -96,9 +102,45 @@ export default function OptimizedVideo({
   const toggleMute = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
+      if (isMuted) {
+        videoRef.current.muted = false;
+        videoRef.current.volume = volume;
+        setIsMuted(false);
+      } else {
+        videoRef.current.muted = true;
+        setIsMuted(true);
+      }
     }
+  };
+
+  // Handle volume change
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = parseFloat(e.target.value);
+    setVolume(newVolume);
+    if (videoRef.current) {
+      videoRef.current.volume = newVolume;
+      if (newVolume > 0 && isMuted) {
+        setIsMuted(false);
+      } else if (newVolume === 0 && !isMuted) {
+        setIsMuted(true);
+      }
+    }
+  };
+
+  // Toggle volume slider visibility
+  const toggleVolumeSlider = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowVolumeSlider(!showVolumeSlider);
+  };
+
+  // Show volume slider on hover
+  const handleVolumeHover = () => {
+    setShowVolumeSlider(true);
+  };
+
+  // Hide volume slider on leave
+  const handleVolumeLeave = () => {
+    setShowVolumeSlider(false);
   };
 
   // Handle scrubber change
@@ -253,11 +295,14 @@ export default function OptimizedVideo({
       )}
 
       {/* Video controls */}
-      <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 transition-opacity duration-300 ${
-        showControls ? 'opacity-100' : 'opacity-0'
-      }`}>
+      <div 
+        className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 transition-opacity duration-300 ${
+          showControls ? 'opacity-100' : 'opacity-0'
+        }`}
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Progress bar */}
-        <div className="mb-3">
+        <div className="mb-3" onClick={(e) => e.stopPropagation()}>
           <input
             type="range"
             min={0}
@@ -279,7 +324,7 @@ export default function OptimizedVideo({
             {/* Play/Pause button */}
             <button
               onClick={togglePlay}
-              className="text-white hover:text-gray-300 transition-colors"
+              className="text-white hover:text-gray-300 hover:scale-110 transition-all duration-200 p-1 rounded"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}
@@ -292,19 +337,44 @@ export default function OptimizedVideo({
           </div>
 
           {/* Volume control */}
-          <button
-            onClick={toggleMute}
-            className="text-white hover:text-gray-300 transition-colors"
-            aria-label={isMuted ? "Unmute" : "Mute"}
+          <div 
+            className="flex items-center gap-2 relative"
+            onMouseEnter={handleVolumeHover}
+            onMouseLeave={handleVolumeLeave}
           >
-            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-          </button>
+            <button
+              onClick={toggleMute}
+              className="text-white hover:text-gray-300 hover:scale-110 transition-all duration-200 p-1 rounded"
+              aria-label={isMuted ? "Unmute" : "Mute"}
+            >
+              {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+            </button>
+            
+            {/* Volume slider */}
+            <div className={`transition-all duration-300 flex items-center ${showVolumeSlider ? 'w-20 opacity-100' : 'w-0 opacity-0 overflow-hidden'}`}>
+              <input
+                type="range"
+                min={0}
+                max={1}
+                step={0.1}
+                value={isMuted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="w-full h-1 bg-white/30 rounded-lg appearance-none cursor-pointer volume-slider"
+                style={{
+                  background: `linear-gradient(to right, white 0%, white ${(isMuted ? 0 : volume) * 100}%, rgba(255,255,255,0.3) ${(isMuted ? 0 : volume) * 100}%, rgba(255,255,255,0.3) 100%)`
+                }}
+                aria-label="Volume control"
+                title="Volume control"
+              />
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Custom slider styles */}
       <style>{`
-        .slider::-webkit-slider-thumb {
+        .slider::-webkit-slider-thumb,
+        .volume-slider::-webkit-slider-thumb {
           appearance: none;
           height: 12px;
           width: 12px;
@@ -312,7 +382,8 @@ export default function OptimizedVideo({
           background: white;
           cursor: pointer;
         }
-        .slider::-moz-range-thumb {
+        .slider::-moz-range-thumb,
+        .volume-slider::-moz-range-thumb {
           height: 12px;
           width: 12px;
           border-radius: 50%;

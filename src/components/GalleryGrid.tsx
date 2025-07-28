@@ -118,12 +118,16 @@ export default function GalleryGrid({ items, title, description }: GalleryGridPr
         <div 
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
           onKeyDown={handleKeyDown}
+          onClick={closeLightbox}
           tabIndex={0}
         >
-          <div className="relative max-w-6xl max-h-full p-4">
+          <div 
+            className="relative max-w-6xl max-h-full p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button 
               onClick={closeLightbox}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 p-2"
+              className="absolute top-4 right-4 text-white hover:text-gray-300 hover:scale-110 transition-all duration-200 z-10 p-2 rounded-full hover:bg-white/10"
               aria-label="Close lightbox"
             >
               <X size={32} />
@@ -132,7 +136,7 @@ export default function GalleryGrid({ items, title, description }: GalleryGridPr
             <div className="flex items-center justify-between w-full">
               <button 
                 onClick={goToPrevious}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10 p-2"
+                className="absolute left-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 hover:scale-110 transition-all duration-200 z-10 p-2 rounded-full hover:bg-white/10"
                 aria-label="Previous image"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,7 +153,7 @@ export default function GalleryGrid({ items, title, description }: GalleryGridPr
               
               <button 
                 onClick={goToNext}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 z-10 p-2"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-white hover:text-gray-300 hover:scale-110 transition-all duration-200 z-10 p-2 rounded-full hover:bg-white/10"
                 aria-label="Next image"
               >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,12 +178,16 @@ export default function GalleryGrid({ items, title, description }: GalleryGridPr
         <div 
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center"
           onKeyDown={handleKeyDown}
+          onClick={closeVideoLightbox}
           tabIndex={0}
         >
-          <div className="relative max-w-4xl max-h-full p-4">
+          <div 
+            className="relative max-w-4xl max-h-full p-4"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button 
               onClick={closeVideoLightbox}
-              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 p-2"
+              className="absolute top-4 right-4 text-white hover:text-gray-300 hover:scale-110 transition-all duration-200 z-10 p-2 rounded-full hover:bg-white/10"
               aria-label="Close video lightbox"
             >
               <X size={32} />
