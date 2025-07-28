@@ -45,9 +45,9 @@ export default function ScrollingNavbar() {
           </div>
           <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
             <li><a href="/">Home</a></li>
-            <li><a href="/banking">Banking Info</a></li>
+            <li><a href="/banking">Informações Bancárias</a></li>
             <li><a href="/gallery">Galeria</a></li>
-            <li><a href="/contact">Contact</a></li>
+            <li><a href="/contact">Contactos</a></li>
           </ul>
         </div>
         <a href="/" className={`btn btn-ghost text-xl font-bold ${textColor}`}>Centro Betel</a>
@@ -55,9 +55,9 @@ export default function ScrollingNavbar() {
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li><a href="/" className={`btn btn-ghost ${textColor}`}>Home</a></li>
-          <li><a href="/banking" className={`btn btn-ghost ${textColor}`}>Banking Info</a></li>
+          <li><a href="/banking" className={`btn btn-ghost ${textColor}`}>Informações Bancárias</a></li>
           <li><a href="/gallery" className={`btn btn-ghost ${textColor}`}>Galeria</a></li>
-          <li><a href="/contact" className={`btn btn-ghost ${textColor}`}>Contact</a></li>
+          <li><a href="/contact" className={`btn btn-ghost ${textColor}`}>Contactos</a></li>
         </ul>
       </div>
       <div className="navbar-end">
