@@ -1,183 +1,101 @@
-# 🚀 Deployment Guide - Centro Betel Website
+# Deploying to Vercel
 
-## Recommended Hosting: Vercel (Free POC)
+This Astro project is configured for easy deployment to Vercel's free plan.
 
-### Why Vercel?
-- ✅ **Perfect for Astro** - Zero configuration needed
-- ✅ **Free tier** - 100GB bandwidth/month
-- ✅ **Automatic deployments** - Connect to GitHub
-- ✅ **Global CDN** - Fast loading worldwide
-- ✅ **Custom domains** - Free SSL certificates
-- ✅ **Analytics** - Built-in performance monitoring
+## Prerequisites
 
----
+1. **Vercel Account**: Sign up at [vercel.com](https://vercel.com)
+2. **GitHub Account**: Your code should be in a GitHub repository
+3. **Bun**: The project uses Bun as the package manager
 
-## 📋 Pre-Deployment Checklist
+## Deployment Steps
 
-### 1. Build the Project
-```bash
-# Install dependencies
-bun install
+### Option 1: Deploy via Vercel Dashboard (Recommended)
 
-# Build for production
-bun run build
-
-# Test locally
-bun run preview
-```
-
-### 2. Check Build Output
-- Verify `dist/` folder is created
-- Check that all images are optimized
-- Test all pages work correctly
-
----
-
-## 🚀 Deploy to Vercel
-
-### Option 1: Vercel CLI (Recommended)
-
-1. **Install Vercel CLI**
-```bash
-bun add -g vercel
-```
-
-2. **Login to Vercel**
-```bash
-vercel login
-```
-
-3. **Deploy**
-```bash
-vercel
-```
-
-4. **Follow the prompts:**
-   - Link to existing project? → `N` (new project)
-   - Project name → `betel-orphanage`
-   - Directory → `./` (current directory)
-   - Override settings? → `N` (use defaults)
-
-### Option 2: GitHub Integration (Automatic Deployments)
-
-1. **Push to GitHub**
-```bash
-git add .
-git commit -m "Ready for deployment"
-git push origin main
-```
-
-2. **Connect to Vercel**
-   - Go to [vercel.com](https://vercel.com)
-   - Sign up with GitHub
+1. **Push to GitHub**: Make sure your code is pushed to a GitHub repository
+2. **Connect to Vercel**:
+   - Go to [vercel.com/dashboard](https://vercel.com/dashboard)
    - Click "New Project"
-   - Import your repository
-   - Deploy automatically
+   - Import your GitHub repository
+   - Vercel will automatically detect it's an Astro project
 
----
+3. **Configure Build Settings**:
+   - **Framework Preset**: Astro (auto-detected)
+   - **Build Command**: `bun run build`
+   - **Output Directory**: `dist`
+   - **Install Command**: `bun install`
 
-## 🔧 Configuration
+4. **Environment Variables**: None required for this project
 
-### Environment Variables (if needed)
-```bash
-# Add to Vercel dashboard or .env.local
-PUBLIC_SITE_URL=https://your-domain.vercel.app
-```
+5. **Deploy**: Click "Deploy" and wait for the build to complete
 
-### Custom Domain (Optional)
-1. Go to Vercel dashboard
-2. Select your project
-3. Go to "Settings" → "Domains"
-4. Add your custom domain
-5. Update DNS records as instructed
+### Option 2: Deploy via Vercel CLI
 
----
+1. **Install Vercel CLI**:
+   ```bash
+   bun add -g vercel
+   ```
 
-## 📊 Performance Monitoring
+2. **Login to Vercel**:
+   ```bash
+   vercel login
+   ```
 
-### Vercel Analytics
-- Built-in performance monitoring
-- Core Web Vitals tracking
-- Real user metrics
+3. **Deploy**:
+   ```bash
+   vercel
+   ```
 
-### Lighthouse Scores
-- Run Lighthouse audit after deployment
-- Target: 90+ for all metrics
-- Monitor regularly
+## Vercel Free Plan Limits
 
----
+✅ **What's Included**:
+- 100GB bandwidth per month
+- 100GB storage
+- 100GB function execution time
+- Automatic HTTPS
+- Custom domains (with DNS configuration)
+- Automatic deployments from Git
 
-## 🔄 Continuous Deployment
+✅ **Perfect for this project**:
+- Static site generation
+- No server-side functions
+- Optimized images and assets
+- Fast loading times
 
-### Automatic Updates
-- Every push to `main` branch triggers deployment
-- Preview deployments for pull requests
-- Instant rollback capability
+## Post-Deployment
 
-### Manual Deployment
-```bash
-vercel --prod
-```
+1. **Custom Domain** (Optional):
+   - Go to your project settings in Vercel
+   - Add your custom domain
+   - Configure DNS records as instructed
 
----
+2. **Environment Variables** (if needed later):
+   - Add any environment variables in the Vercel dashboard
+   - Redeploy to apply changes
 
-## 🆘 Troubleshooting
+3. **Monitoring**:
+   - Check the "Analytics" tab for performance metrics
+   - Monitor function execution in the "Functions" tab
 
-### Common Issues
+## Troubleshooting
 
-1. **Build Fails**
-```bash
-# Check for missing dependencies
-bun install
+### Build Issues
+- Ensure all dependencies are in `package.json`
+- Check that Bun is available in the build environment
+- Verify the build command: `bun run build`
 
-# Clear cache
-rm -rf node_modules .astro dist
-bun install
-```
+### Performance Issues
+- Images are optimized for web delivery
+- Assets are cached with appropriate headers
+- Static generation ensures fast loading
 
-2. **Images Not Loading**
-- Check image paths in `public/images/`
-- Verify image optimization is working
-- Check browser console for errors
+### Domain Issues
+- DNS propagation can take up to 48 hours
+- Ensure CNAME records point to Vercel
+- Check SSL certificate status
 
-3. **Performance Issues**
-- Run `bun run build` to check bundle size
-- Use Vercel Analytics to identify bottlenecks
-- Optimize images further if needed
+## Support
 
----
-
-## 📈 Scaling Up
-
-### When to Upgrade
-- Traffic exceeds 100GB/month
-- Need team collaboration
-- Require advanced analytics
-- Custom server-side features
-
-### Alternative Hosting Options
-- **Netlify** - Similar to Vercel, great for static sites
-- **GitHub Pages** - Free, good for simple sites
-- **Cloudflare Pages** - Excellent performance, generous free tier
-
----
-
-## 🎯 Next Steps
-
-1. **Deploy to Vercel** using the steps above
-2. **Test thoroughly** on different devices
-3. **Set up monitoring** with Vercel Analytics
-4. **Add custom domain** when ready
-5. **Share the URL** with stakeholders
-
----
-
-## 📞 Support
-
-- **Vercel Docs**: [vercel.com/docs](https://vercel.com/docs)
-- **Astro Docs**: [docs.astro.build](https://docs.astro.build)
-- **Community**: [astro.build/community](https://astro.build/community)
-
----
-
-**Happy Deploying! 🚀** 
+- [Vercel Documentation](https://vercel.com/docs)
+- [Astro Documentation](https://docs.astro.build)
+- [Vercel Community](https://github.com/vercel/vercel/discussions) 

@@ -107,29 +107,29 @@ Desktop.ini
 # Local development
 *.local
 
-# Images and media files (exclude from Git, will be uploaded directly to Vercel)
-public/images/
-public/videos/
-public/media/
+# Images and media files (keep in Git for Vercel deployment)
+# public/images/ - KEEP THIS FOR VERCEL DEPLOYMENT
+# public/videos/ - KEEP THIS FOR VERCEL DEPLOYMENT
+# public/media/ - KEEP THIS FOR VERCEL DEPLOYMENT
 images/
 videos/
 media/
 
-# Large files that should be uploaded directly
-*.mp4
-*.mov
-*.avi
-*.mkv
-*.webm
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.webp
-*.avif
-*.svg
-*.ico
-*.pdf
+# Large files that should be uploaded directly (but keep public/ files for Vercel)
+# *.mp4 - KEEP public/ files for Vercel deployment
+# *.mov - KEEP public/ files for Vercel deployment
+# *.avi - KEEP public/ files for Vercel deployment
+# *.mkv - KEEP public/ files for Vercel deployment
+# *.webm - KEEP public/ files for Vercel deployment
+# *.jpg - KEEP public/ files for Vercel deployment
+# *.jpeg - KEEP public/ files for Vercel deployment
+# *.png - KEEP public/ files for Vercel deployment
+# *.gif - KEEP public/ files for Vercel deployment
+# *.webp - KEEP public/ files for Vercel deployment
+# *.avif - KEEP public/ files for Vercel deployment
+# *.svg - KEEP public/ files for Vercel deployment
+# *.ico - KEEP public/ files for Vercel deployment
+# *.pdf - KEEP public/ files for Vercel deployment
 
 # Backup files
 *.bak
