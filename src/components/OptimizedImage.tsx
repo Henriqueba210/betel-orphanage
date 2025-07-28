@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 
 interface OptimizedImageProps {
@@ -20,15 +20,54 @@ export default function OptimizedImage({
 }: OptimizedImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [showImage, setShowImage] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
 
   // Handle image load events
   const handleLoad = () => {
+    console.log(`✅ Image loaded: ${src}`);
     setIsLoaded(true);
+    setShowImage(true);
   };
 
   const handleError = () => {
+    console.error(`❌ Image failed to load: ${src}`);
     setIsError(true);
+    setShowImage(true); // Show error state
   };
+
+  // Fallback: if image is already loaded (cached), mark as loaded
+  useEffect(() => {
+    if (imgRef.current) {
+      if (imgRef.current.complete) {
+        console.log(`✅ Image already cached: ${src}`);
+        setIsLoaded(true);
+        setShowImage(true);
+      }
+    }
+  }, [src]);
+
+  // Timeout fallback to prevent infinite loading - shorter timeout for better UX
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (!isLoaded && !isError) {
+        console.warn(`⚠️ Image timeout, forcing display: ${src}`);
+        setShowImage(true); // Force show image even if onLoad didn't fire
+        setIsLoaded(true); // Mark as loaded to hide loading state
+      }
+    }, 1500); // Reduced to 1.5 seconds for better UX
+
+    return () => clearTimeout(timeout);
+  }, [isLoaded, isError, src]);
+
+  // Show image after a brief delay to prevent flash
+  useEffect(() => {
+    const showTimeout = setTimeout(() => {
+      setShowImage(true);
+    }, 100);
+
+    return () => clearTimeout(showTimeout);
+  }, []);
 
   if (isError) {
     return (
@@ -36,6 +75,7 @@ export default function OptimizedImage({
         <div className="text-center p-4">
           <div className="text-4xl mb-2">🖼️</div>
           <p className="text-sm text-base-content/60">Image not available</p>
+          <p className="text-xs text-base-content/40 mt-1">{src}</p>
         </div>
       </div>
     );
@@ -50,27 +90,30 @@ export default function OptimizedImage({
     >
       {/* Loading placeholder */}
       {!isLoaded && (
-        <div className="absolute inset-0 bg-base-200 animate-pulse flex items-center justify-center">
+        <div className="absolute inset-0 bg-base-200 animate-pulse flex items-center justify-center z-10">
           <div className="text-base-content/30">Loading...</div>
         </div>
       )}
 
       {/* Standard image */}
-      <img
-        src={src}
-        alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
-          isLoaded ? 'opacity-100' : 'opacity-0'
-        }`}
-        loading={priority ? 'eager' : 'lazy'}
-        decoding="async"
-        onLoad={handleLoad}
-        onError={handleError}
-        style={{
-          // Prevent layout shift
-          aspectRatio: '16/9',
-        }}
-      />
+      {showImage && (
+        <img
+          ref={imgRef}
+          src={src}
+          alt={alt}
+          className={`w-full h-full object-cover transition-opacity duration-300 ${
+            isLoaded ? 'opacity-100' : 'opacity-50'
+          }`}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding="async"
+          onLoad={handleLoad}
+          onError={handleError}
+          style={{
+            // Prevent layout shift
+            aspectRatio: '16/9',
+          }}
+        />
+      )}
 
       {/* Caption overlay */}
       {caption && (
