@@ -1,5 +1,4 @@
-import { Image } from 'astro:assets';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 
 interface OptimizedImageProps {
@@ -31,17 +30,6 @@ export default function OptimizedImage({
     setIsError(true);
   };
 
-  // Generate responsive srcset for different screen sizes
-  const generateSrcSet = (originalSrc: string) => {
-    const sizes = [400, 800, 1200, 1600];
-    return sizes
-      .map(size => `${originalSrc}?w=${size} ${size}w`)
-      .join(', ');
-  };
-
-  // Generate sizes attribute for responsive images
-  const sizes = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, (max-width: 1536px) 33vw, 25vw";
-
   if (isError) {
     return (
       <div className={`bg-base-200 flex items-center justify-center ${className}`}>
@@ -67,15 +55,13 @@ export default function OptimizedImage({
         </div>
       )}
 
-      {/* Optimized image */}
+      {/* Standard image */}
       <img
         src={src}
         alt={alt}
         className={`w-full h-full object-cover transition-opacity duration-300 ${
           isLoaded ? 'opacity-100' : 'opacity-0'
         }`}
-        srcSet={generateSrcSet(src)}
-        sizes={sizes}
         loading={priority ? 'eager' : 'lazy'}
         decoding="async"
         onLoad={handleLoad}
