@@ -29,7 +29,13 @@ export default function OptimizedVideo({
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(muted);
   const [isError, setIsError] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [showControls, setShowControls] = useState(false);
+  const [showCenterButton, setShowCenterButton] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const controlsTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const centerButtonTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Handle video load events
   const handleLoadStart = () => {
@@ -38,14 +44,44 @@ export default function OptimizedVideo({
 
   const handleCanPlay = () => {
     setIsLoaded(true);
+    // If autoplay is enabled, start playing and update state
+    if (autoplay && videoRef.current) {
+      videoRef.current.play().then(() => {
+        setIsPlaying(true);
+      }).catch(() => {
+        // Autoplay failed (common in browsers that block autoplay)
+        setIsPlaying(false);
+      });
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (videoRef.current) {
+      setDuration(videoRef.current.duration);
+    }
+  };
+
+  const handleTimeUpdate = () => {
+    if (videoRef.current) {
+      setCurrentTime(videoRef.current.currentTime);
+    }
   };
 
   const handleError = () => {
     setIsError(true);
   };
 
+  const handlePlay = () => {
+    setIsPlaying(true);
+  };
+
+  const handlePause = () => {
+    setIsPlaying(false);
+  };
+
   // Handle play/pause
-  const togglePlay = () => {
+  const togglePlay = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (videoRef.current) {
       if (isPlaying) {
         videoRef.current.pause();
@@ -63,6 +99,47 @@ export default function OptimizedVideo({
       videoRef.current.muted = !isMuted;
       setIsMuted(!isMuted);
     }
+  };
+
+  // Handle scrubber change
+  const handleScrubberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = parseFloat(e.target.value);
+    if (videoRef.current) {
+      videoRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  // Format time to MM:SS
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  // Show controls on hover/mouse move
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) {
+      clearTimeout(controlsTimeoutRef.current);
+    }
+    controlsTimeoutRef.current = setTimeout(() => {
+      setShowControls(false);
+    }, 3000);
+  };
+
+  // Handle center click for play/pause
+  const handleCenterClick = () => {
+    togglePlay();
+    
+    // Show center button briefly
+    setShowCenterButton(true);
+    if (centerButtonTimeoutRef.current) {
+      clearTimeout(centerButtonTimeoutRef.current);
+    }
+    centerButtonTimeoutRef.current = setTimeout(() => {
+      setShowCenterButton(false);
+    }, 600);
   };
 
   // Intersection Observer for lazy loading
@@ -90,6 +167,18 @@ export default function OptimizedVideo({
     };
   }, []);
 
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (controlsTimeoutRef.current) {
+        clearTimeout(controlsTimeoutRef.current);
+      }
+      if (centerButtonTimeoutRef.current) {
+        clearTimeout(centerButtonTimeoutRef.current);
+      }
+    };
+  }, []);
+
   if (isError) {
     return (
       <div className={`bg-base-200 flex items-center justify-center ${className}`}>
@@ -104,9 +193,8 @@ export default function OptimizedVideo({
   return (
     <motion.div
       className={`relative overflow-hidden ${className}`}
-      onClick={onClick || togglePlay}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
+      onMouseMove={handleMouseMove}
+      onClick={handleCenterClick}
     >
       {/* Loading placeholder */}
       {!isLoaded && (
@@ -123,8 +211,15 @@ export default function OptimizedVideo({
         }`}
         poster={poster}
         preload="metadata"
+        autoPlay={autoplay}
+        muted={isMuted}
+        loop={loop}
         onLoadStart={handleLoadStart}
         onCanPlay={handleCanPlay}
+        onLoadedMetadata={handleLoadedMetadata}
+        onTimeUpdate={handleTimeUpdate}
+        onPlay={handlePlay}
+        onPause={handlePause}
         onError={handleError}
         style={{
           aspectRatio: '16/9',
@@ -135,34 +230,97 @@ export default function OptimizedVideo({
         Your browser does not support the video tag.
       </video>
 
-      {/* Play/Pause overlay */}
-      <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-        <div className="opacity-0 hover:opacity-100 transition-opacity duration-300 text-white">
+      {/* YouTube-style center play/pause button */}
+      <div 
+        className={`absolute inset-0 flex items-center justify-center transition-opacity duration-200 ${
+          showCenterButton ? 'opacity-100' : 'opacity-0'
+        }`}
+      >
+        <div className="bg-black/70 hover:bg-black/80 text-white p-4 rounded-full transition-all duration-200 cursor-pointer">
           {isPlaying ? (
-            <Pause size={32} fill="white" />
+            <Play size={32} fill="white" className="ml-1" />
           ) : (
-            <Play size={32} fill="white" />
+            <Pause size={32} fill="white" />
           )}
         </div>
       </div>
 
-      {/* Video controls */}
-      <div className="absolute bottom-2 right-2 flex gap-2">
-        <button
-          onClick={toggleMute}
-          className="bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-colors"
-          aria-label={isMuted ? "Unmute" : "Mute"}
-        >
-          {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
-        </button>
-      </div>
-
       {/* Caption overlay */}
       {caption && (
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
-          <p className="text-white text-sm">{caption}</p>
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-4 pb-20">
+          <p className="text-white text-sm font-medium">{caption}</p>
         </div>
       )}
+
+      {/* Video controls */}
+      <div className={`absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 transition-opacity duration-300 ${
+        showControls ? 'opacity-100' : 'opacity-0'
+      }`}>
+        {/* Progress bar */}
+        <div className="mb-3">
+          <input
+            type="range"
+            min={0}
+            max={duration || 0}
+            value={currentTime}
+            onChange={handleScrubberChange}
+            className="w-full h-1 bg-white/30 rounded-lg appearance-none cursor-pointer slider"
+            style={{
+              background: `linear-gradient(to right, white 0%, white ${(currentTime / (duration || 1)) * 100}%, rgba(255,255,255,0.3) ${(currentTime / (duration || 1)) * 100}%, rgba(255,255,255,0.3) 100%)`
+            }}
+            aria-label="Video progress"
+            title="Video progress"
+          />
+        </div>
+
+        {/* Controls row */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Play/Pause button */}
+            <button
+              onClick={togglePlay}
+              className="text-white hover:text-gray-300 transition-colors"
+              aria-label={isPlaying ? "Pause" : "Play"}
+            >
+              {isPlaying ? <Pause size={20} /> : <Play size={20} />}
+            </button>
+
+            {/* Time display */}
+            <div className="text-white text-sm">
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </div>
+          </div>
+
+          {/* Volume control */}
+          <button
+            onClick={toggleMute}
+            className="text-white hover:text-gray-300 transition-colors"
+            aria-label={isMuted ? "Unmute" : "Mute"}
+          >
+            {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Custom slider styles */}
+      <style>{`
+        .slider::-webkit-slider-thumb {
+          appearance: none;
+          height: 12px;
+          width: 12px;
+          border-radius: 50%;
+          background: white;
+          cursor: pointer;
+        }
+        .slider::-moz-range-thumb {
+          height: 12px;
+          width: 12px;
+          border-radius: 50%;
+          background: white;
+          cursor: pointer;
+          border: none;
+        }
+      `}</style>
     </motion.div>
   );
 } 

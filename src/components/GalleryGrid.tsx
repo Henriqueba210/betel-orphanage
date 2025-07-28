@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Search, Play, X } from 'lucide-react';
 import OptimizedImage from './OptimizedImage';
 import OptimizedVideo from './OptimizedVideo';
+import VideoPreview from './VideoPreview';
 
 interface GalleryItem {
   src: string;
@@ -95,13 +96,12 @@ export default function GalleryGrid({ items, title, description }: GalleryGridPr
                   priority={index < 4} // Load first 4 images with priority
                 />
               ) : (
-                <OptimizedVideo
+                <VideoPreview
                   src={item.src}
                   alt={item.alt}
                   caption={item.caption}
                   className="w-full h-full"
                   onClick={() => openVideoLightbox(item.src, item.caption)}
-                  muted={true}
                 />
               )}
             </figure>
@@ -192,6 +192,7 @@ export default function GalleryGrid({ items, title, description }: GalleryGridPr
               className="max-w-full max-h-[80vh]"
               autoplay={true}
               muted={false}
+              loop={false}
             />
             
             <p className="text-white text-center mt-4 text-lg">
