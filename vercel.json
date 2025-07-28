@@ -3,11 +3,6 @@
   "outputDirectory": "dist",
   "framework": "astro",
   "installCommand": "bun install",
-  "functions": {
-    "app/api/**/*.ts": {
-      "runtime": "bun"
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
